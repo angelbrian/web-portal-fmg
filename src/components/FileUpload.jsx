@@ -31,7 +31,7 @@ const FileUpload = () => {
 
       setData(JSON.stringify(jsonData, null, 2));
 
-      axios.post('http://localhost:3000/api/upload', jsonData, { withCredentials: false })
+      axios.post('https://ws.katalabs.mx/api/upload', jsonData, { withCredentials: false })
       .then(( response ) => {
         console.log(response.data, `API response`);
       });

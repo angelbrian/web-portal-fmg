@@ -12,7 +12,7 @@ export const Level1 = ({ dataInfo, name }) => {
         const bg = colors()[company]['bg'];
         const color = colors()[company]['color'];
         return  <>
-                    <tr onClick={() => setOpen({ ...open, [company]: !open[company] })}>
+                    <tr className='my-other-step' style={{ fontSize: '16px', borderBottom: '1px solid black' }} onClick={() => setOpen({ ...open, [company]: !open[company] })}>
                         <td style={{ width: '50%' }}>
                             <table style={{ width: '100%', backgroundColor: 'gray', color: 'white' }}>
                                 <tr>
@@ -48,7 +48,7 @@ export const Level1 = ({ dataInfo, name }) => {
                                     })[0];
                                     
                                     if (agroup && balance) {
-                                        return <DataLevel1 balance={ balance } agroup={ agroup } />
+                                        return <DataLevel1 balance={ balance } agroup={ agroup } bg={ bg } color={ color } />
                                     }
                                 }
                                 return <td style={{ width: '10%' }}></td>
@@ -64,9 +64,9 @@ export const Level1 = ({ dataInfo, name }) => {
     });
 };
 
-export const DataLevel1 = ({ agroup, balance, index }) => {
+export const DataLevel1 = ({ agroup, balance, index, bg, color }) => {
     let sum = 0;
-    return <td style={{ width: '10%' }}>
+    return <td style={{ width: '10%', backgroundColor: bg, color }}>
         <table>
             <tbody>
                 {
@@ -76,16 +76,16 @@ export const DataLevel1 = ({ agroup, balance, index }) => {
                             sum += Math.round( b['saldo-final'] );
                             return <tr>
                                 { 
-                                    index === 1 && <td>
+                                    index === 1 && <td className='padding-custom'>
                                         company
                                     </td>
                                 }
-                                <td style={{ /*textAlign: 'right'*/ }}>{ formatCurrency( b['saldo-final'] ) }</td>
+                                <td className='t-r padding-custom'>{ formatCurrency( b['saldo-final'] ) }</td>
                             </tr>
                         }
                     })
                 }
-                <tr><td style={{ /*textAlign: 'right'*/ }}><strong>{ formatCurrency( sum ) }</strong></td></tr>
+                <tr><td className='t-r padding-custom'><strong>{ formatCurrency( sum ) }</strong></td></tr>
             </tbody>
         </table>
     </td>
@@ -102,7 +102,7 @@ export const HeadLevel1 = ({ agroup, balance }) => {
                                 <td style={{ width: '100%', borderBottom: '1px solid white', fontWeight: 'bold'  }}>
                                     <table>
                                         <tr>
-                                            <td style={{ width: '10%' }}>{ b['cuenta'] }</td>
+                                            <td className='padding-custom' style={{ width: '10%' }}>{ b['cuenta'] }</td>
                                             <td className='ellipsis' style={{ width: '90%' }}>{ b['nombre'] }</td>
                                         </tr>
                                     </table>
@@ -111,7 +111,7 @@ export const HeadLevel1 = ({ agroup, balance }) => {
                         }
                     })
                 }
-                <tr><td style={{ width: '100%', borderBottom: '1px solid white', fontWeight: 'bold'  }}><strong>Total</strong></td></tr>
+                <tr><td className='padding-custom' style={{ width: '100%', borderBottom: '1px solid white', fontWeight: 'bold'  }}><strong>Total</strong></td></tr>
             </tbody>
         </table>
 };

@@ -7,11 +7,11 @@ import { AppTheme } from './theme'
 import { Typography } from '@mui/material';
 
 ReactDOM.createRoot( document.getElementById('root') ).render(
-    // <React.StrictMode>
+    <React.StrictMode>
         <Router>
             <AppTheme>
                 <App />
             </AppTheme>
         </Router>
-    // </React.StrictMode>
+    </React.StrictMode>
 );

@@ -29,13 +29,13 @@ return (
     <AppBar position="static">
       <Toolbar>
         <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-          Balanza Portal
+          Portal
         </Typography>
         <Button color="inherit" component={Link} to="/upload" startIcon={<UploadFile />}>
-          Upload File
+          Subir balanza
         </Button>
         <Button color="inherit" component={Link} to="/view" startIcon={<Visibility />}>
-          View Data
+          Ver desglose
         </Button>
       </Toolbar>
     </AppBar>

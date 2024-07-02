@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Level1 } from './Level1';
 import { formatCurrency } from '../helpers/formats';
 
-export const Level0 = ({ data }) => {
+export const Level0 = ({ data, filter }) => {
     const { companies, months, groups } = data;
     const reduceData = {};
 
@@ -45,8 +45,8 @@ export const Level0 = ({ data }) => {
 
     return aReduceData.map(([name, accounts]) => (
         <>
-            <tr key={name} style={{ background: open[name] ? '#0A0A0A' : '', color: open[name] ? 'white' : '' }} onClick={() => setOpen({ ...open, [name]: !open[name] })}>
-                <td>{name}</td>
+            <tr className='my-first-step' key={name} style={{ borderBottom: '1px solid black', background: open[name] ? '#0A0A0A' : '', color: open[name] ? 'white' : '', fontSize: '18px' }} onClick={() => setOpen({ ...open, [name]: !open[name] })}>
+                <td className='padding-custom'>{name}</td>
                 {months.map((month) => {
                     if (accounts[month]) {
                         const monthOfAccount = Object.entries(accounts[month]);
@@ -60,7 +60,7 @@ export const Level0 = ({ data }) => {
                             sumTotal += sum;// oper;
                         });
                         return (
-                            <td key={month}>
+                            <td className='t-r padding-custom' key={month}>
                                 <strong>{ formatCurrency( sumTotal ) }</strong>
                             </td>
                         );

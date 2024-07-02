@@ -1,3 +1,4 @@
+import { blue, red } from '@mui/material/colors';
 import { colors } from '../../public/styles/colors';
 import { formatCurrency } from '../helpers/formats';
 
@@ -10,7 +11,7 @@ export const Level2= ({ dataInfo, name, companyInit }) => {
             const bg = colors()[company]['bg'];
             const color = colors()[company]['color'];
             return  <>
-                        <tr>
+                        <tr style={{ fontSize: '14px', borderBottom: '1px solid black' }}>
                             <td>
                                 <table>
                                     <tr>
@@ -48,7 +49,7 @@ export const Level2= ({ dataInfo, name, companyInit }) => {
                                         })[0];
                                         
                                         if (agroup && balance) {
-                                            return <DataLevel2 balance={ balance } agroup={ agroup } son={ son } company={ company } />
+                                            return <DataLevel2 balance={ balance } agroup={ agroup } son={ son } company={ company } bg={bg} color={color} />
                                         }
                                     }
                                     return <td></td>
@@ -61,9 +62,9 @@ export const Level2= ({ dataInfo, name, companyInit }) => {
     });
 };
 
-export const DataLevel2 = ({ agroup, balance, company, son }) => {
+export const DataLevel2 = ({ agroup, balance, company, son, bg, color }) => {
     // let sum = 0;
-    return <td>
+    return <td style={{ backgroundColor: bg, color }}>
         <table>
             <tbody>
                 {
@@ -78,8 +79,8 @@ export const DataLevel2 = ({ agroup, balance, company, son }) => {
                             return <tr>
                                         <td style={{ width: '100%' }}>
                                             <table>
-                                                <tr>
-                                                    <td><strong>{ formatCurrency( b['saldo-final'] ) }</strong></td>
+                                                <tr style={{ borderBottom: '1px solid gray' }}>
+                                                    <td className='t-r'><strong>{ formatCurrency( b['saldo-final'] ) }</strong></td>
                                                     {/* <td><strong>{ b['cuenta'] }</strong></td> */}
                                                 </tr>
                                                 {
@@ -89,8 +90,8 @@ export const DataLevel2 = ({ agroup, balance, company, son }) => {
                                                     exists.map(( et ) => {
                                                         const coincidence = b['data'].find(( d ) => d.cuenta === et)
                                                         if ( coincidence )
-                                                            return <tr><td>{ formatCurrency( coincidence['saldo-final'] ) }</td></tr>;
-                                                        return <tr><td>{ formatCurrency( 0 ) }</td></tr>
+                                                            return <tr style={{ borderBottom: '1px solid gray' }}><td className='t-r'>{ formatCurrency( coincidence['saldo-final'] ) }</td></tr>;
+                                                        return <tr style={{ borderBottom: '1px solid gray' }}><td className='t-r'>{ formatCurrency( 0 ) }</td></tr>
                                                     })
                                                 }
                                             </table>
@@ -115,15 +116,15 @@ export const HeadLevel2 = ({ agroup, balance, index }) => {
                             return <tr>
                                 <td style={{ width: '100%' }}>
                                     <table>
-                                        <tr>
-                                            <td style={{ width: '10%' }}><strong>{ b['cuenta'] }</strong></td>
-                                            <td className='ellipsis' style={{ width: '90%' }}><strong>{ b['nombre'] }</strong></td>
+                                        <tr style={{ borderBottom: '1px solid gray' }}>
+                                            <td style={{ width: '18%' }}><strong>{ b['cuenta'] }</strong></td>
+                                            <td className='ellipsis' style={{ width: '82%' }}><strong>{ b['nombre'] }</strong></td>
                                         </tr>
                                         {
                                             b['data'].map(( e ) => {
-                                                return <tr>
-                                                    <td style={{ width: '10%' }}>{ e['cuenta'] }</td>
-                                                    <td style={{ width: '90%' }}>{ e['nombre'] }</td>
+                                                return <tr style={{ borderBottom: '1px solid gray' }}>
+                                                    <td style={{ width: '18%' }}>{ e['cuenta'] }</td>
+                                                    <td style={{ width: '82%' }}>{ e['nombre'] }</td>
                                                 </tr>
                                             })
                                         }

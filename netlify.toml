@@ -1,0 +1,5 @@
+[[redirects]]
+  from = "/api/*"
+  to = "http://api-ws-portal-fmg.us-east-1.elasticbeanstalk.com/api/:splat"
+  status = 200
+  force = true

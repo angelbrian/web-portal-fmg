@@ -2,6 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Katalabs App</title>
@@ -35,7 +36,7 @@
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
-        text-align: right;
+        /* text-align: right; */
         /* border-bottom: 1px solid black; */
       }
       .ellipsis {
@@ -43,6 +44,18 @@
         white-space: nowrap; /* asegura que el texto no se envuelva */
         overflow: hidden; /* oculta el texto que excede el ancho del td */
         text-overflow: ellipsis; /* muestra puntos suspensivos (...) cuando el texto se corta */
+      }
+      .t-r {
+        text-align: right;
+      }
+      .padding-custom {
+        padding-top: 10px;
+        padding-bottom: 10px;
+        padding-left: 5px;
+        padding-right: 5px;
+      }
+      .css-1oqqzyl-MuiContainer-root {
+        max-width: initial;
       }
     </style>
   </head>
