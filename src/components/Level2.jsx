@@ -80,7 +80,7 @@ export const DataLevel2 = ({ agroup, balance, company, son, bg, color }) => {
                                         <td style={{ width: '100%' }}>
                                             <table>
                                                 <tr style={{ borderBottom: '1px solid gray' }}>
-                                                    <td className='t-r'><strong>{ formatCurrency( b['saldo-final'] ) }</strong></td>
+                                                    <td className='t-r'><strong>{ formatCurrency( b['saldo-final'] ) == '0' ? '------' : formatCurrency( b['saldo-final'] ) }</strong></td>
                                                     {/* <td><strong>{ b['cuenta'] }</strong></td> */}
                                                 </tr>
                                                 {
@@ -89,9 +89,11 @@ export const DataLevel2 = ({ agroup, balance, company, son, bg, color }) => {
                                                 {
                                                     exists.map(( et ) => {
                                                         const coincidence = b['data'].find(( d ) => d.cuenta === et)
-                                                        if ( coincidence )
-                                                            return <tr style={{ borderBottom: '1px solid gray' }}><td className='t-r'>{ formatCurrency( coincidence['saldo-final'] ) }</td></tr>;
-                                                        return <tr style={{ borderBottom: '1px solid gray' }}><td className='t-r'>{ formatCurrency( 0 ) }</td></tr>
+                                                        if ( coincidence ) {
+                                                            const fCV = formatCurrency( coincidence['saldo-final'] );
+                                                            return <tr style={{ borderBottom: '1px solid gray' }}><td className='t-r'>{ fCV == '0' ? '------' : fCV }</td></tr>;
+                                                        }
+                                                        return <tr style={{ borderBottom: '1px solid gray' }}><td className='t-r'>------</td></tr>
                                                     })
                                                 }
                                             </table>

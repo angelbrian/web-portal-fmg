@@ -106,7 +106,7 @@ const DataView = () => {
         </thead>
         <tbody>
           {/* {dataInfo && <Level0 data={dataInfo} />} */}
-          {filteredDataInfo && <Level0 data={filteredDataInfo} filter={ selectedColors } />}
+          {filteredDataInfo && <Level0 dataInit={dataInfo} data={filteredDataInfo} filter={ selectedColors } />}
         </tbody>
       </table>
       <JoyrideTutorial

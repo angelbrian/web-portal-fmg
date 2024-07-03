@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Level1 } from './Level1';
 import { formatCurrency } from '../helpers/formats';
 
-export const Level0 = ({ data, filter }) => {
+export const Level0 = ({ dataInit, data, filter }) => {
     const { companies, months, groups } = data;
     const reduceData = {};
 
@@ -61,14 +61,15 @@ export const Level0 = ({ data, filter }) => {
                         });
                         return (
                             <td className='t-r padding-custom' key={month}>
-                                <strong>{ formatCurrency( sumTotal ) }</strong>
+                                <strong>{ formatCurrency( sumTotal ) == '0' ? '------' : formatCurrency( sumTotal ) }</strong>
                             </td>
                         );
                     }
                     return <td key={month}></td>;
                 })}
             </tr>
-            {open[name] && <Level1 dataInfo={data} name={name} />}
+            {/* {open[name] && <Level1 dataInfo={data} name={name} />} */}
+            {open[name] && <Level1 dataInfo={dataInit} name={name} />}
         </>
     ));
 };
