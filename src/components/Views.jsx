@@ -8,8 +8,6 @@ import ColorFilter from './Filter';
 import { Box } from '@mui/material';
 import { colors } from '../../public/styles/colors';
 
-const monthsCurrent = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo'];
-
 const DataView = () => {
   const [dataInfo, setDataInfo] = useState(null);
   const [months, setMonths] = useState([]);
@@ -47,6 +45,7 @@ const DataView = () => {
     const fetchData = async () => {
       try {
         const response = await axios.post('https://ws.katalabs.mx/api/data');
+        // const response = await axios.post('http://localhost:3000/api/data');
         const responseData = response.data;
         console.log({
           data: responseData

@@ -4,6 +4,7 @@ import { formatCurrency } from '../helpers/formats';
 
 export const Level0 = ({ dataInit, data, filter }) => {
     const { companies, months, groups } = data;
+    console.log({ companies, months, groups })
     const reduceData = {};
 
     // Estado para controlar la visibilidad de Level1
@@ -53,7 +54,8 @@ export const Level0 = ({ dataInit, data, filter }) => {
                         let sumTotal = 0;
                         monthOfAccount.forEach(([company, balances]) => {
                             const sum = balances.reduce((accumulator, number) => {
-                                const mult = number.cuenta === '307-000-000' && (number.name === 'NUMERO FRIO' || number.name === 'GEN 32') ? -1 : 1;
+                                // const mult = number.cuenta === '307-000-000' && (number.name === 'NUMERO FRIO' || number.name === 'GEN 32') ? -1 : 1;
+                                const mult = 1;
                                 return accumulator + number['saldo-final'] * mult;
                             }, 0);
                             // const oper = Math.round(sum / 1000);

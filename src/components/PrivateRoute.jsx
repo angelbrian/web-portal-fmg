@@ -1,11 +1,18 @@
-// src/components/PrivateRoute.js
 import { Navigate } from 'react-router-dom';
 import { useAuth } from './context/AuthContext';
 
 const PrivateRoute = ({ children }) => {
-  const { currentUser } = useAuth();
+  const { currentUser, isApproved } = useAuth();
 
-  return currentUser ? children : <Navigate to="/login" />;
+  if (!currentUser) {
+    return <Navigate to="/login" />;
+  }
+
+  if (!isApproved) {
+    return <Navigate to="/aprobacion" />;
+  }
+
+  return children;
 };
 
 export default PrivateRoute;

@@ -4,16 +4,10 @@ import { Level2 } from './Level2';
 import { formatCurrency } from '../helpers/formats';
 
 export const Level1 = ({ dataInfo, name }) => {
-    const { companies, months, groups, data, son } = dataInfo;
+    const { companies, months, groups, data, multiplicators } = dataInfo;
     const [open, setOpen] = useState({});
-    const [accountsActive, setAccountsActive] = useState([]);
+    console.log({multiplicators})
     let firstHead = '';
-
-    const handleAccountsActive = (v) => {
-        if (!accountsActive.includes(v)) {
-            setAccountsActive([v, ...accountsActive]);
-        }
-    };
     
     return companies.map((company) => {
         const bg = colors()[company]['bg'];
@@ -43,7 +37,6 @@ export const Level1 = ({ dataInfo, name }) => {
                                                         key={month}
                                                         balance={balance}
                                                         agroup={agroup}
-                                                        handleActive={handleAccountsActive}
                                                     />
                                                 );
                                             }
@@ -65,8 +58,8 @@ export const Level1 = ({ dataInfo, name }) => {
                                         agroup={agroup}
                                         bg={bg}
                                         color={color}
-                                        accountsActive={accountsActive}
                                         name={name}
+                                        company={company}
                                     />
                                 );
                             }
@@ -80,95 +73,37 @@ export const Level1 = ({ dataInfo, name }) => {
     });
 };
 
-export const DataLevel1 = ({ agroup, balance, bg, color, accountsActive, name }) => {
-    
+export const DataLevel1 = ({ agroup, balance, bg, color, name, company }) => {
     let sum = 0;
-    // balance.map((b, index) => {
-    //     const fBalanceAgroup = agroup['data'].includes(b['cuenta']);
-    //     if (fBalanceAgroup) {
-    //         sum += Math.round(b['saldo-final']);
-    //         return (
-    //             <tr key={index}>
-    //                 <td className='t-r padding-custom'>{formatCurrency(b['saldo-final'])}</td>
-    //             </tr>
-    //         );
-    //     } else if (accountsActive.includes(b['cuenta'])) {
-
-    //         return (
-    //             <tr key={index}>
-    //                 <td className='t-r padding-custom'>lskdcowkdc</td>
-    //             </tr>
-    //         );
-    //     }
-    // })
 
     return (
         <td style={{ width: '10%', backgroundColor: bg, color }}>
-            <table>
+            <table className='t-r'>
                 <tbody>
                     {
-                        accountsActive.map(( v ) => {
-                            // let sum = 0;
-                            const validAgroup = balance.find(( a ) => { return a.cuenta === v; })
-                            const fBalanceAgroup = agroup['data'].includes( v );
-                            let vB = false;
-                            
-                            return balance.map(( b, index ) => {
-                                
-                                const isLast = index === balance.length - 1;
-                                if (!validAgroup && fBalanceAgroup && !vB) {
-                                    console.log({v})
-                                    vB = true;
-                                    return <tr>
-                                        <td className='t-r padding-custom'>------</td>
-                                    </tr>
-                                }
+                        agroup['data'].map(( v ) => {
+                            const validAgroup = balance.find(( a ) => { return a.cuenta === v; });
 
-                                if (b['cuenta'] === v) {
-                                    let mSum = 1;
-                                    if (b['cuenta'] === '307-000-000' && (name === 'NUMERO FRIO' || name === 'GEN 32')) {
-                                        mSum = -1;
-                                    }
-                                    sum += (b['saldo-final'] * mSum);
-                                    const fSF = formatCurrency( (b['saldo-final'] * mSum) );
-                                    let vReturn = <tr>
-                                                        <td className='t-r padding-custom'>{ fSF == 0 ? '------' : fSF  }</td>
-                                                    </tr>;
-                                    // let vReturnFinal = <tr><td>{sum}</td></tr>;
-                                    
-                                    // return  isLast ? vReturnFinal : vReturn;
-                                    return  vReturn;
-                                    
-                                }
-
-                            })
-                            // return  <tr>
-                            //             <td className='t-r padding-custom'>{ v }</td>
-                            //         </tr>
+                            if (validAgroup) {
+                                sum += parseFloat( validAgroup['saldo-final'] );
+                                return  <tr>
+                                            <td className='t-r padding-custom'>
+                                                { 
+                                                    validAgroup['saldo-final'] != 0 ?
+                                                    formatCurrency( validAgroup['saldo-final'] ) :
+                                                    '------'
+                                                }
+                                            </td>
+                                        </tr>
+                            }
+                            return <tr><td>------</td></tr>
                         })
-                        // balance.map((b, index) => {
-                        //     const fBalanceAgroup = agroup['data'].includes(b['cuenta']);
-                        //     console.log({accountsActive})
-                        //     if (fBalanceAgroup) {
-                        //         sum += Math.round(b['saldo-final']);
-                        //         return (
-                        //             <tr key={index}>
-                        //                 <td className='t-r padding-custom'>{formatCurrency(b['saldo-final'])}</td>
-                        //             </tr>
-                        //         );
-                        //     } else if (accountsActive.includes(b['cuenta'])) {
-    
-                        //         return (
-                        //             <tr key={index}>
-                        //                 <td className='t-r padding-custom'>lskdcowkdc</td>
-                        //             </tr>
-                        //         );
-                        //     }
-                        // })
                     }
                     <tr>
                         <td className='t-r padding-custom'>
-                            <strong>{formatCurrency(sum)}</strong>
+                            <strong>
+                                { formatCurrency( sum ) }
+                            </strong>
                         </td>
                     </tr>
                 </tbody>
@@ -178,42 +113,7 @@ export const DataLevel1 = ({ agroup, balance, bg, color, accountsActive, name })
 
 };
 
-// export const DataLevel1 = ({ agroup, balance, bg, color, accountsActive }) => {
-//     let sum = 0;
-//     return (
-//         <td style={{ width: '10%', backgroundColor: bg, color }}>
-//             <table>
-//                 <tbody>
-//                     {balance.map((b, index) => {
-//                         const fBalanceAgroup = agroup['data'].includes(b['cuenta']);
-//                         if (fBalanceAgroup) {
-//                             sum += Math.round(b['saldo-final']);
-//                             return (
-//                                 <tr key={index}>
-//                                     <td className='t-r padding-custom'>{formatCurrency(b['saldo-final'])}</td>
-//                                 </tr>
-//                             );
-//                         } else if (accountsActive.includes(b['cuenta'])) {
-
-//                             return (
-//                                 <tr key={index}>
-//                                     <td className='t-r padding-custom'>lskdcowkdc</td>
-//                                 </tr>
-//                             );
-//                         }
-//                     })}
-//                     <tr>
-//                         <td className='t-r padding-custom'>
-//                             <strong>{formatCurrency(sum)}</strong>
-//                         </td>
-//                     </tr>
-//                 </tbody>
-//             </table>
-//         </td>
-//     );
-// };
-
-export const HeadLevel1 = ({ agroup, balance, handleActive }) => {
+export const HeadLevel1 = ({ agroup, balance }) => {
     return (
         <table>
             <tbody>
@@ -223,7 +123,6 @@ export const HeadLevel1 = ({ agroup, balance, handleActive }) => {
 
                         if (b === e.cuenta) {
                             name = e.nombre;
-                            handleActive(b)
                         }
 
                     });

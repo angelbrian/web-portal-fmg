@@ -1,9 +1,10 @@
-// src/components/auth/Register.js
 import { useState } from 'react';
-import { useAuth } from '../../components/context/AuthContext';
 import { useNavigate, Link } from 'react-router-dom';
 import { Container, TextField, Button, Box, Typography } from '@mui/material';
 import PersonAddIcon from '@mui/icons-material/PersonAdd';
+import { doc, setDoc } from "firebase/firestore";
+import { useAuth } from '../context/AuthContext';
+import { firestore } from '../../helpers/firebase';
 
 const Register = () => {
   const [email, setEmail] = useState('');
@@ -13,8 +14,14 @@ const Register = () => {
 
   const handleRegister = async () => {
     try {
-      await register(email, password);
-      navigate('/ver');
+      const userCredential = await register(email, password);
+      const user = userCredential.user;
+      await setDoc(doc(firestore, 'pendingUsers', user.uid), {
+        email: user.email,
+        approved: false
+      });
+      alert('Registro exitoso. Espera la aprobación del administrador.');
+      navigate('/login');
     } catch (error) {
       console.error('Error registrando:', error);
     }

@@ -4,7 +4,7 @@ import { formatCurrency } from '../helpers/formats';
 
 export const Level2= ({ dataInfo, name, companyInit }) => {
     const { companies, months, groups, data, son } = dataInfo;
-    let firstHead = '';
+    let firstHead = [];
     
     return companies.map(( company ) => {
         if(company === companyInit) {
@@ -16,25 +16,9 @@ export const Level2= ({ dataInfo, name, companyInit }) => {
                                 <table>
                                     <tr>
                                         <td style={{ width: '10%', backgroundColor: bg, color, textAlign: 'center' }}>
-                                            {/* { company } */}
                                         </td>
                                         <td style={{ backgroundColor: bg+'17' }}>
-                                        {
-                                            months.map(( month ) => {
-                                                
-                                                if(data[month] && data[month][company] && firstHead !== company) {
-                                                    const balance = data[month][company]['balance'];
-                                                    const agroup = groups[company].filter( c => {
-                                                        return c.name === name;
-                                                    })[0];
-                                                    firstHead = company;
-                                                    if (agroup && balance) {
-                                                        return <HeadLevel2 balance={ balance } agroup={ agroup } />
-                                                    }
-                                                } 
-
-                                            })
-                                        }
+                                        <HeadLevel2 agroup={ son[company][name] } />
                                         </td>
                                     </tr>
                                 </table>
@@ -44,12 +28,14 @@ export const Level2= ({ dataInfo, name, companyInit }) => {
                                     
                                     if(data[month] && data[month][company]) {
                                         const balance = data[month][company]['balance'];
-                                        const agroup = groups[company].filter( c => {
-                                            return c.name === name;
-                                        })[0];
                                         
-                                        if (agroup && balance) {
-                                            return <DataLevel2 balance={ balance } agroup={ agroup } son={ son } company={ company } bg={bg} color={color} />
+                                        if (balance) {
+                                            return <DataLevel2 
+                                                        balance={ balance } 
+                                                        agroup={ son[company][name] } 
+                                                        bg={ bg } 
+                                                        color={ color } 
+                                                    />
                                         }
                                     }
                                     return <td></td>
@@ -62,80 +48,66 @@ export const Level2= ({ dataInfo, name, companyInit }) => {
     });
 };
 
-export const DataLevel2 = ({ agroup, balance, company, son, bg, color }) => {
-    // let sum = 0;
-    return <td style={{ backgroundColor: bg, color }}>
-        <table>
+export const HeadLevel2 = ({ agroup }) => {
+    return <table>
             <tbody>
                 {
-                    balance.map(( b ) => {
-                        const fBalanceAgroup = agroup['data'].find(( e ) => e === b['cuenta'])
-                        // if (fBalanceAgroup) {
-                        //     const exists = son[company][agroup['name']][fBalanceAgroup];
-                        //     console.log({ fBalanceAgroup, exists });
-                        // }
-                        if (fBalanceAgroup) {
-                            const exists = son[company][agroup['name']][fBalanceAgroup];
-                            return <tr>
-                                        <td style={{ width: '100%' }}>
-                                            <table>
-                                                <tr style={{ borderBottom: '1px solid gray' }}>
-                                                    <td className='t-r'><strong>{ formatCurrency( b['saldo-final'] ) == '0' ? '------' : formatCurrency( b['saldo-final'] ) }</strong></td>
-                                                    {/* <td><strong>{ b['cuenta'] }</strong></td> */}
-                                                </tr>
-                                                {
-                                                    b['data'].length === 0 && <tr><td>---</td></tr>
-                                                }
-                                                {
-                                                    exists.map(( et ) => {
-                                                        const coincidence = b['data'].find(( d ) => d.cuenta === et)
-                                                        if ( coincidence ) {
-                                                            const fCV = formatCurrency( coincidence['saldo-final'] );
-                                                            return <tr style={{ borderBottom: '1px solid gray' }}><td className='t-r'>{ fCV == '0' ? '------' : fCV }</td></tr>;
-                                                        }
-                                                        return <tr style={{ borderBottom: '1px solid gray' }}><td className='t-r'>------</td></tr>
-                                                    })
-                                                }
-                                            </table>
-                                        </td>
-                                    </tr>
-                        }
+                    Object.entries( agroup ).map(( a ) => {
+                        return <>
+                            <tr style={{ borderBottom: '1px solid gray' }}>
+                                <td style={{ width: '18%' }}><strong>{ a[1][0]['cuenta'] }</strong></td>
+                                <td style={{ width: '82%' }}><strong>{ a[1][0]['nombre'] }</strong></td>
+                            </tr>
+                            {
+                                a[1].map(( e, index ) => {
+                                    if (index !== 0) {
+                                        return <tr style={{ borderBottom: '1px solid gray' }}>
+                                            <td style={{ width: '18%' }}>{ e['cuenta'] }</td>
+                                            <td style={{ width: '82%' }}>{ e['nombre'] }</td>
+                                        </tr>
+                                    }
+                                })
+                            }
+                        </>
+                    })
+                }
+            </tbody>
+        </table>
+};
+
+export const DataLevel2 = ({ agroup, balance, bg, color }) => {
+    // let sum = 0;
+    // console.log({ son })
+    console.log('agrupación', Object.entries( agroup ))
+    return <td style={{ backgroundColor: bg, color }}>
+        <table className='t-r'>
+            <tbody>
+                {
+                    Object.entries( agroup ).map(( v ) => {
+                        return v[1].map(( element ) => {
+                            console.log('laterales', v[0], element)
+                            
+                            const b = balance.find(( e ) => ( e.cuenta === element.cuenta ));
+                            
+                            if ( b ) {
+                                const valueCurrent = formatCurrency( b['saldo-final'] );
+                                const valueFormatCurrent = valueCurrent == 0 ? '------' : valueCurrent ;
+                                if (v[0] === element.cuenta) {
+                                    return <><tr><td><strong>{ valueFormatCurrent }</strong></td></tr></> 
+                                }
+                                
+                                return <>
+                                        <tr><td>{ valueFormatCurrent }</td></tr>
+                                    </>  
+                            }
+
+                            return <>
+                                        <tr><td>------</td></tr>
+                                    </> 
+                        })
                     })
                 }
             </tbody>
         </table>
     </td>
-};
-
-export const HeadLevel2 = ({ agroup, balance, index }) => {
-    return <table>
-            <tbody>
-                {
-                    balance.map(( b ) => {
-                        const fBalanceAgroup = agroup['data'].find(( e ) => e === b['cuenta'])
-                        if (fBalanceAgroup) {
-                            const init = fBalanceAgroup.split('-')[0];
-                            return <tr>
-                                <td style={{ width: '100%' }}>
-                                    <table>
-                                        <tr style={{ borderBottom: '1px solid gray' }}>
-                                            <td style={{ width: '18%' }}><strong>{ b['cuenta'] }</strong></td>
-                                            <td className='ellipsis' style={{ width: '82%' }}><strong>{ b['nombre'] }</strong></td>
-                                        </tr>
-                                        {
-                                            b['data'].map(( e ) => {
-                                                return <tr style={{ borderBottom: '1px solid gray' }}>
-                                                    <td style={{ width: '18%' }}>{ e['cuenta'] }</td>
-                                                    <td style={{ width: '82%' }}>{ e['nombre'] }</td>
-                                                </tr>
-                                            })
-                                        }
-                                    </table>
-                                </td>
-                            </tr>
-                        }
-                    })
-                }
-            </tbody>
-        </table>
 };
