@@ -6,7 +6,7 @@ import { formatCurrency } from '../helpers/formats';
 export const Level1 = ({ dataInfo, name }) => {
     const { companies, months, groups, data, multiplicators } = dataInfo;
     const [open, setOpen] = useState({});
-    console.log({multiplicators})
+    // console.log({multiplicators})
     let firstHead = '';
     
     return companies.map((company) => {

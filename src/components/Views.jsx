@@ -7,10 +7,12 @@ import JoyrideTutorial from './JoyrideTutorial';
 import ColorFilter from './Filter';
 import { Box } from '@mui/material';
 import { colors } from '../../public/styles/colors';
+import { postData } from '../services/apiService';
 
 const DataView = () => {
   const [dataInfo, setDataInfo] = useState(null);
   const [months, setMonths] = useState([]);
+  const [multiplicators, setMultiplicators] = useState([]);
   const [loading, setLoading] = useState(true);
   const [tutorialOpen, setTutorialOpen] = useState(false);
   const [selectedColors, setSelectedColors] = useState([]);
@@ -44,19 +46,17 @@ const DataView = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.post('https://ws.katalabs.mx/api/data');
-        // const response = await axios.post('http://localhost:3000/api/data');
+        const response = await postData();
         const responseData = response.data;
-        console.log({
-          data: responseData
-        });
+
+        console.log({ responseData })
         
         setSelectedColors(Object.entries( colors() ).map( key =>  ( key[0] ) ));
-        // handleSelectedColors( Object.entries( colors() ).map( key =>  ( key[0] ) ), responseData.data );
         handleSelectedColors( Object.entries( colors() ).map( key =>  ( key[0] ) ), responseData );
 
         setDataInfo(responseData);
         setMonths(responseData.months);
+        setMultiplicators(responseData.multiplicators);
         
         if(!localStorage.getItem('tour')) {
           setTutorialOpen(true);
@@ -104,8 +104,15 @@ const DataView = () => {
           </tr>
         </thead>
         <tbody>
-          {/* {dataInfo && <Level0 data={dataInfo} />} */}
-          {filteredDataInfo && <Level0 dataInit={dataInfo} data={filteredDataInfo} filter={ selectedColors } />}
+          {
+            filteredDataInfo && 
+            <Level0 
+              dataInit={dataInfo} 
+              data={filteredDataInfo} 
+              filter={ selectedColors } 
+              multiplicators={ multiplicators } 
+            />
+          }
         </tbody>
       </table>
       <JoyrideTutorial

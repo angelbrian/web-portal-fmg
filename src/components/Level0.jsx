@@ -2,9 +2,9 @@ import { useState } from 'react';
 import { Level1 } from './Level1';
 import { formatCurrency } from '../helpers/formats';
 
-export const Level0 = ({ dataInit, data, filter }) => {
-    const { companies, months, groups } = data;
-    console.log({ companies, months, groups })
+export const Level0 = ({ dataInit, data }) => {
+    const { companies, months, groups, multiplicators } = data;
+    console.log({DATAAAAA: multiplicators})
     const reduceData = {};
 
     // Estado para controlar la visibilidad de Level1
@@ -18,7 +18,7 @@ export const Level0 = ({ dataInit, data, filter }) => {
                 const agroupName = agroupItem['name'];
                 agroupAccount.forEach((element) => {
                     months.forEach(month => {
-                        let nValuesTemp = [1, 2, 3];
+                        let nValuesTemp = [];
                         if (data['data'][month]) {
                             if (data['data'][month][company]) {
                                 nValuesTemp = data['data'][month][company]['balance'].filter((v) => {
@@ -55,10 +55,9 @@ export const Level0 = ({ dataInit, data, filter }) => {
                         monthOfAccount.forEach(([company, balances]) => {
                             const sum = balances.reduce((accumulator, number) => {
                                 // const mult = number.cuenta === '307-000-000' && (number.name === 'NUMERO FRIO' || number.name === 'GEN 32') ? -1 : 1;
-                                const mult = 1;
+                                const mult = parseInt( multiplicators[company][name][number.cuenta]['multiplicator'] );
                                 return accumulator + number['saldo-final'] * mult;
                             }, 0);
-                            // const oper = Math.round(sum / 1000);
                             sumTotal += sum;// oper;
                         });
                         return (
@@ -70,8 +69,7 @@ export const Level0 = ({ dataInit, data, filter }) => {
                     return <td key={month}></td>;
                 })}
             </tr>
-            {/* {open[name] && <Level1 dataInfo={data} name={name} />} */}
-            {open[name] && <Level1 dataInfo={dataInit} name={name} />}
+            {open[name] && <Level1 dataInfo={dataInit} name={name} multiplicators={ multiplicators } />}
         </>
     ));
 };

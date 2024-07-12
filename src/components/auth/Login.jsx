@@ -14,7 +14,7 @@ const Login = () => {
   const handleLogin = async () => {
     try {
       await login(email, password);
-      navigate('/ver');
+      location.href = '/ver';
     } catch (error) {
       console.error('Error iniciando sesión:', error);
     }

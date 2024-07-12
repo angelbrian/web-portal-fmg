@@ -1,9 +1,6 @@
-// src/components/FileUpload.jsx
 import React, { useState } from 'react';
 import * as XLSX from 'xlsx';
-import axios from 'axios';
-
-axios.defaults.headers.post['Content-Type'] ='application/x-www-form-urlencoded';
+import { uploadFile } from '../services/apiService';
 
 const FileUpload = () => {
   const [file, setFile] = useState(null);
@@ -20,7 +17,7 @@ const FileUpload = () => {
     }
 
     const reader = new FileReader();
-    
+
     reader.onload = async (e) => {
       const arrayBuffer = e.target.result;
       const data = new Uint8Array(arrayBuffer);
@@ -31,16 +28,14 @@ const FileUpload = () => {
 
       setData(JSON.stringify(jsonData, null, 2));
 
-      axios.post('https://ws.katalabs.mx/api/upload', jsonData, { withCredentials: false })
-      // axios.post('http://localhost:3000/api/upload', jsonData, { withCredentials: false })
-      .then(( response ) => {
-        console.log(response.data, `API response`);
-      });
-
+      try {
+        const response = await uploadFile(jsonData);
+      } catch (error) {
+        console.error('Error uploading file', error);
+      }
     };
 
     reader.readAsArrayBuffer(file);
-
   };
 
   return (

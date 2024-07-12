@@ -4,7 +4,6 @@ import { formatCurrency } from '../helpers/formats';
 
 export const Level2= ({ dataInfo, name, companyInit }) => {
     const { companies, months, groups, data, son } = dataInfo;
-    let firstHead = [];
     
     return companies.map(( company ) => {
         if(company === companyInit) {
@@ -49,6 +48,7 @@ export const Level2= ({ dataInfo, name, companyInit }) => {
 };
 
 export const HeadLevel2 = ({ agroup }) => {
+    console.log({ agroup });
     return <table>
             <tbody>
                 {
@@ -76,16 +76,13 @@ export const HeadLevel2 = ({ agroup }) => {
 };
 
 export const DataLevel2 = ({ agroup, balance, bg, color }) => {
-    // let sum = 0;
-    // console.log({ son })
-    console.log('agrupación', Object.entries( agroup ))
+    
     return <td style={{ backgroundColor: bg, color }}>
         <table className='t-r'>
             <tbody>
                 {
                     Object.entries( agroup ).map(( v ) => {
                         return v[1].map(( element ) => {
-                            console.log('laterales', v[0], element)
                             
                             const b = balance.find(( e ) => ( e.cuenta === element.cuenta ));
                             
